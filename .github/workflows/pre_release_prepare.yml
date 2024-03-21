@@ -41,15 +41,24 @@ jobs:
           git commit -am "Update version to ${{ github.event.inputs.version }}"
           git push origin "${{ github.event.inputs.version }}_release"
 
-      - name: Create Pull Request
-        uses: repo-sync/pull-request@v2
-        with:
-          source_branch: "${{ github.event.inputs.version }}_release"
-          destination_branch: "release/${MAJOR_MINOR}.x"
-          github_token: ${{ secrets.GA_ACCESS_KEY }}
-          pr_title: "Pre-release: Update version to ${{ github.event.inputs.version }}"
-          pr_body: |
-            ## Description
-            This PR updates the version to ${{ github.event.inputs.version }}.
-            
-            By submitting this pull request, I confirm that you can use, modify, copy, and redistribute this contribution, under the terms of your choice.
+#      - name: Create Pull Request
+#        uses: repo-sync/pull-request@v2
+#        with:
+#          source_branch: "${{ github.event.inputs.version }}_release"
+#          destination_branch: "release/${MAJOR_MINOR}.x"
+#          github_token: ${{ secrets.GA_ACCESS_KEY }}
+#          pr_title: "Pre-release: Update version to ${{ github.event.inputs.version }}"
+#          pr_body: |
+#            ## Description
+#            This PR updates the version to ${{ github.event.inputs.version }}.
+#
+#            By submitting this pull request, I confirm that you can use, modify, copy, and redistribute this contribution, under the terms of your choice.
+      - name: Create pull request against the release branch
+        env:
+          # not using secrets.GITHUB_TOKEN since pull requests from that token do not run workflows
+          GITHUB_TOKEN: ${{ secrets.GA_ACCESS_KEY }}
+        run: |
+          gh pr create --title "Pre-release: Update version to ${{ github.event.inputs.version }}" \
+                       --body "This PR updates the version to ${{ github.event.inputs.version }}. \n\n By submitting this pull request, I confirm that you can use, modify, copy, and redistribute this contribution, under the terms of your choice." \
+                       --head ${{ github.event.inputs.version }}_release \
+                       --base release/${MAJOR_MINOR}.x
