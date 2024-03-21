@@ -58,6 +58,8 @@ jobs:
           # not using secrets.GITHUB_TOKEN since pull requests from that token do not run workflows
           GITHUB_TOKEN: ${{ secrets.GA_ACCESS_KEY }}
         run: |
+          VERSION="${{ github.event.inputs.version }}"
+          MAJOR_MINOR=$(echo $VERSION | sed -E 's/([0-9]+\.[0-9]+)\.[0-9]+/\1/')
           echo "Major.Minor version is ${MAJOR_MINOR}"
           echo "${{ github.event.inputs.version }}_release"
           
