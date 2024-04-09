@@ -1,20 +1,21 @@
 name: Build and Push aws-opentelemetry-distro
 description: |
-  This action assumes that the repo was checked out. Builds and pushes/loads wheel and image files.
+  This action assumes that the repo was checked out. Builds and pushes/loads wheel and image files. Also performs scan
+  of the resultant image.
 
 inputs:
   aws-region:
-    required: true
-    description: "AWS Region"
+    required: false
+    description: "AWS Region, required only if push_image is true"
   image_uri_with_tag:
     required: true
     description: "Image URI with Tag"
   image_registry:
-    required: true
-    description: "Image Registry"
+    required: false
+    description: "Image Registry, required only if push_image is true"
   snapshot-ecr-role:
-    required: true
-    description: "IAM Role used for pushing to snapshot ecr"
+    required: false
+    description: "IAM Role used for pushing to snapshot ecr, required only if push_image is true"
   push_image:
     required: true
     description: "Whether push image to ECR"
@@ -91,3 +92,9 @@ runs:
         platforms: linux/amd64
         tags: ${{ inputs.image_uri_with_tag }}
         load: ${{ inputs.load_image }}
+
+    - name: Perform image scan
+      uses: ./.github/actions/image_scan
+      with:
+        image-ref: ${{ inputs.image_uri_with_tag }}
+        severity: 'CRITICAL,HIGH,MEDIUM,LOW,UNKNOWN'

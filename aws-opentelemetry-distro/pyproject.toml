@@ -11,7 +11,6 @@ license = "Apache-2.0"
 requires-python = ">=3.8"
 
 dependencies = [
-  "grpcio == 1.60.1",
   "opentelemetry-api == 1.22.0",
   "opentelemetry-instrumentation == 0.43b0",
   "opentelemetry-sdk == 1.22.0",
@@ -68,12 +67,14 @@ dependencies = [
   "opentelemetry-instrumentation-urllib3 == 0.43b0",
   "opentelemetry-instrumentation-wsgi == 0.43b0",
   "opentelemetry-instrumentation-cassandra == 0.43b0",
-
-  # Patch dependencies
-  "botocore ~= 1.0",
 ]
 
 [project.optional-dependencies]
+# The 'patch' optional dependency is used for applying patches to specific libraries.
+# If a new patch is added into the list, it must also be added into tox.ini, dev-requirements.txt and _instrumentation_patch
+patch = [
+  "botocore ~= 1.0",
+]
 test = []
 
 [project.entry-points.opentelemetry_configurator]
