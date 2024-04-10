@@ -47,6 +47,7 @@ jobs:
           if [ "$CURRENT_MAJOR" -gt "$INPUT_MAJOR" ] || { [ "$CURRENT_MAJOR" -eq "$INPUT_MAJOR" ] && [ "$CURRENT_MINOR" -gt "$INPUT_MINOR" ]; }; then
             echo "Input version is behind main's current major.minor version, don't need to update major version"
             exit 1
+          fi
           
 
   prepare-main:
