@@ -107,7 +107,7 @@ jobs:
 
       - name: Create Pull Request to main
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ env.BOT_TOKEN_GITHUB_RW_PATOKEN }}
         run: |
           DEV_VERSION="${{ github.event.inputs.version }}.dev0"
           gh pr create --title "Post release $VERSION: Update version to $DEV_VERSION" \
