@@ -62,11 +62,17 @@ jobs:
 
       - name: Get Bot secrets
         uses: aws-actions/aws-secretsmanager-get-secrets@v1
-        id: pypi_secrets
+        id: bot_secrets
         with:
           secret-ids: |
             BOT_TOKEN ,${{ secrets.BOT_TOKEN_SECRET_ARN }}
           parse-json-secrets: true
+
+      - name: Setup Git
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          token: ${{ steps.bot_secrets.outputs.BOT_TOKEN.Github-RW-PAToken }}
 
       - name: Configure Git
         run: |
