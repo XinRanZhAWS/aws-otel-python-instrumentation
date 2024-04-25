@@ -54,11 +54,19 @@ jobs:
     runs-on: ubuntu-latest
     needs: check-version
     steps:
-      - name: Setup Git
-        uses: actions/checkout@v2
+      - name: Configure AWS credentials for PyPI secrets
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          fetch-depth: 0
-          token: ${{ secrets.GIT_RW_BOT_TOKEN }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN_PYPI_RELEASE }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+      - name: Get Bot secrets
+        uses: aws-actions/aws-secretsmanager-get-secrets@v1
+        id: pypi_secrets
+        with:
+          secret-ids: |
+            BOT_TOKEN ,${{ secrets.BOT_TOKEN_SECRET_ARN }}
+          parse-json-secrets: true
 
       - name: Configure Git
         run: |
