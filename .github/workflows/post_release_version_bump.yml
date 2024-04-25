@@ -76,7 +76,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-          token: ${{ steps.bot_secrets.outputs.BOT_TOKEN.Github-RW-PAToken }}
+          token: ${{ env.BOT_TOKEN_GITHUB_RW_PATOKEN }}
 
       - name: Configure Git
         run: |
